@@ -1,7 +1,41 @@
+'use client';
+
 import Image from "next/image";
-import ProjectsCarousel from "./components/ProjectsCarousel";
+import Link from "next/link";
+import { useEffect, Suspense } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import heavy components with loading states
+const ProjectsCarousel = dynamic(() => import("./components/ProjectsCarousel"), {
+  loading: () => <div className="w-full h-96 bg-neutral-100 animate-pulse rounded-2xl" />,
+  ssr: false,
+});
+
+const BlogShowcase = dynamic(() => import("./components/BlogShowcase"), {
+  loading: () => <div className="w-full h-96 bg-neutral-50 animate-pulse rounded-2xl" />,
+});
 
 export default function Home() {
+  // Handle smooth scroll when page loads with hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        const element = document.getElementById(hash.substring(1));
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
       {/* Hero */}
@@ -22,7 +56,7 @@ export default function Home() {
       </section>
 
       {/* About Us / Core Features */}
-      <section className="py-32 bg-white text-neutral-900">
+      <section id="about" className="py-32 bg-white text-neutral-900">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 mb-6">
@@ -68,7 +102,7 @@ export default function Home() {
                 height={560}
                 className="about-features-img"
                 loading="lazy"
-                quality={85}
+                quality={75}
               />
             </figure>
 
@@ -102,7 +136,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="relative py-24 bg-neutral-50 text-neutral-900">
+      <section id="services" className="relative py-24 bg-neutral-50 text-neutral-900">
         <div className="mx-auto max-w-7xl px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left column (light theme like reference) */}
           <div className="max-w-xl">
@@ -137,7 +171,7 @@ export default function Home() {
                   height={240}
                   className="services-photo-img"
                   loading="lazy"
-                  quality={85}
+                  quality={75}
                 />
                 <div className="services-tag">
                   <span className="role">Mobile App Development</span>
@@ -164,7 +198,7 @@ export default function Home() {
                   height={240}
                   className="services-photo-img"
                   loading="lazy"
-                  quality={85}
+                  quality={75}
                 />
                 <div className="services-tag">
                   <span className="role">Website Development</span>
@@ -182,7 +216,7 @@ export default function Home() {
                   fill
                   className="object-cover"
                   loading="lazy"
-                  quality={85}
+                  quality={75}
                 />
               </div>
               <div className="relative z-10">
@@ -204,7 +238,7 @@ export default function Home() {
                   height={240}
                   className="services-photo-img"
                   loading="lazy"
-                  quality={85}
+                  quality={75}
                 />
                 <div className="services-tag">
                   <span className="role">Digital Marketing</span>
@@ -225,7 +259,7 @@ export default function Home() {
       </section>
 
       {/* Projects We have Completed Section */}
-      <section className="py-24 bg-white text-neutral-900">
+      <section id="works" className="py-24 bg-white text-neutral-900">
         <div className="mx-auto max-w-7xl px-6">
           {/* Header with title and buttons */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12 gap-6">
@@ -237,18 +271,21 @@ export default function Home() {
               <button className="text-neutral-900 hover:opacity-70 transition-opacity text-sm font-medium">
                 Start New Project
               </button>
-              <button
+              <Link
+                href="/works"
                 className="px-6 py-3 text-sm font-medium text-white rounded transition-all hover:opacity-90"
                 style={{ backgroundColor: "#ff0000" }}
               >
                 View All Projects
-              </button>
+              </Link>
             </div>
           </div>
 
           {/* Project Cards Carousel */}
           <div className="w-full">
-            <ProjectsCarousel />
+            <Suspense fallback={<div className="w-full h-96 bg-neutral-100 animate-pulse rounded-2xl" />}>
+              <ProjectsCarousel />
+            </Suspense>
           </div>
         </div>
       </section>
@@ -389,6 +426,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={<div className="w-full h-96 bg-neutral-50 animate-pulse rounded-2xl" />}>
+        <BlogShowcase />
+      </Suspense>
     </>
   );
 }

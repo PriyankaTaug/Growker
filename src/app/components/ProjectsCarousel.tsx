@@ -43,14 +43,24 @@ export default function ProjectsCarousel() {
     return 1; // mobile: show 1 card
   };
 
-  // Update cards to show on mount and resize
+  // Update cards to show on mount and resize (throttled for performance)
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     const updateCardsToShow = () => {
       setCardsToShow(getCardsToShow());
     };
+    
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateCardsToShow, 150);
+    };
+    
     updateCardsToShow();
-    window.addEventListener('resize', updateCardsToShow);
-    return () => window.removeEventListener('resize', updateCardsToShow);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const maxIndex = Math.max(0, projects.length - cardsToShow);
@@ -140,7 +150,8 @@ export default function ProjectsCarousel() {
                     fill
                     className="object-cover"
                     loading="lazy"
-                    quality={85}
+                    quality={75}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                 </div>
               )}

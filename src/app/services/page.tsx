@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import BlogShowcase from "../components/BlogShowcase";
 
 export default function ServicesPage() {
   return (
@@ -21,12 +23,13 @@ export default function ServicesPage() {
               <button className="text-neutral-900 hover:opacity-70 transition-opacity text-sm font-medium">
                 Start New Project
               </button>
-              <button
+              <Link
+                href="/works"
                 className="px-6 py-3 text-sm font-medium text-white rounded transition-all hover:opacity-90"
                 style={{ backgroundColor: "#ff0000" }}
               >
                 View All Projects
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -65,9 +68,10 @@ export default function ServicesPage() {
                 src="/images/web.jpg"
                 alt="Design Project"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className="object-cover"
                 loading="lazy"
-                quality={85}
+                quality={75}
               />
             </div>
 
@@ -77,9 +81,10 @@ export default function ServicesPage() {
                 src="/images/brand.jpg"
                 alt="Creative Design"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className="object-cover"
                 loading="lazy"
-                quality={85}
+                quality={75}
               />
             </div>
 
@@ -89,14 +94,18 @@ export default function ServicesPage() {
                 src="/images/mobile.jpg"
                 alt="Mobile App"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className="object-cover"
                 loading="lazy"
-                quality={85}
+                quality={75}
               />
             </div>
           </div>
         </div>
       </section>
+
+      {/* Blog Section */}
+      <BlogShowcase id="blog" />
     </>
   );
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Quicksand } from "next/font/google";
 import "./globals.css";
+import SiteHeader from "./components/SiteHeader";
+import SiteFooter from "./components/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,22 +35,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} antialiased bg-black text-white`}
       >
-        <header className="fixed inset-x-0 top-0 z-50">
-          <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-            <a href="/" className="text-2xl font-semibold tracking-[0.08em] lowercase text-white" style={{fontFamily:"var(--font-logo)"}}>growcker</a>
-            <nav className="hidden md:flex gap-8 text-sm text-zinc-300">
-              <a className="hover:text-white" href="/">Home</a>
-              <a className="hover:text-white" href="/about">About</a>
-              <a className="hover:text-white" href="/services">Services</a>
-              <a className="hover:text-white" href="/works">Works</a>
-              <a className="hover:text-white" href="/stories">Stories</a>
-              <a className="hover:text-white" href="/contact">Let&apos;s Talk</a>
-              <a className="hover:text-white" href="/careers">Careers</a>
-            </nav>
-            <button aria-label="Menu" className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded border border-white/10 text-zinc-200">≡</button>
-          </div>
-        </header>
+        <SiteHeader />
         <main className="min-h-screen">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );
